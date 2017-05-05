@@ -1,0 +1,1 @@
+export { default } from 'ember-histo-slider/components/histo-slider';

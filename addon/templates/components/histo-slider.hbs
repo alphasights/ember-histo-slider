@@ -1,0 +1,13 @@
+<svg class="ember-histo" width={{svgWidth}} height={{svgHeight}}></svg>
+<div style="width: {{histogramWidth}}px; margin-left: {{margin.left}}px;">
+  {{range-slider
+    connect="upper"
+    on-update="updateValue"
+    on-change="setValue"
+    min=dataMin
+    max=dataMax
+    start=startValue}}
+
+    {{value}}
+    {{setValue}}
+</div>
