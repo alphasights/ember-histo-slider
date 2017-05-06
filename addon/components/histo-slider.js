@@ -12,6 +12,8 @@ export default Ember.Component.extend({
   svgHeight: '500',
   curtain: null,
   data: null,
+  dataMin: null,
+  dataMax: null,
   value: null,
   setValue: null,
   startValue: computed('dataMin', 'dataMax', function() {
@@ -37,22 +39,14 @@ export default Ember.Component.extend({
     return svgHeight - margin.top - margin.bottom;
   }),
 
-  ticksCount: 20,
-
-  dataMin: computed('data', function() {
-    return 0;
-  }),
-
-  dataMax: computed('data', function() {
-    return 70000;
-  }),
+  intervalCount: null,
 
   bins: computed('x', 'data', 'tickThreshold', function() {
     let x = get(this, 'x');
     let data = get(this, 'data');
     return histogram()
         .domain(x.domain())
-        .thresholds(get(this, 'ticksCount'))(data);
+        .thresholds(get(this, 'intervalCount'))(data);
   }),
 
   x: computed('histogramWidth', function() {
