@@ -11,11 +11,23 @@ export default Ember.Component.extend({
   svgWidth: '960',
   svgHeight: '500',
   curtain: null,
+  currentBinIndex: null,
   data: null,
-  dataMin: null,
   dataMax: null,
-  value: null,
+  dataMin: null,
+  intervalCount: null,
+  margin: {top: 10, right: 30, bottom: 30, left: 30},
   setValue: null,
+  value: null,
+
+  bins: computed('x', 'data', 'tickThreshold', function() {
+    let x = get(this, 'x');
+    let data = get(this, 'data');
+    return histogram()
+        .domain(x.domain())
+        .thresholds(get(this, 'intervalCount'))(data);
+  }),
+
   startValue: computed('dataMin', 'dataMax', function() {
     return (get(this, 'dataMin') + get(this, 'dataMax')) / 2
   }),
@@ -24,14 +36,6 @@ export default Ember.Component.extend({
     return select('.ember-histo');
   }).volatile(),
 
-  margin: {top: 10, right: 30, bottom: 30, left: 30},
-
-  histogramWidth: computed('svgWidth', 'margin', function() {
-    let svgWidth = get(this, 'svgWidth');
-    let margin = get(this, 'margin');
-    return svgWidth - margin.left - margin.right;
-  }),
-
   histogramHeight: computed('svgHeight', 'margin', function() {
     let svgHeight = get(this, 'svgHeight');
     let margin = get(this, 'margin');
@@ -39,14 +43,10 @@ export default Ember.Component.extend({
     return svgHeight - margin.top - margin.bottom;
   }),
 
-  intervalCount: null,
-
-  bins: computed('x', 'data', 'tickThreshold', function() {
-    let x = get(this, 'x');
-    let data = get(this, 'data');
-    return histogram()
-        .domain(x.domain())
-        .thresholds(get(this, 'intervalCount'))(data);
+  histogramWidth: computed('svgWidth', 'margin', function() {
+    let svgWidth = get(this, 'svgWidth');
+    let margin = get(this, 'margin');
+    return svgWidth - margin.left - margin.right;
   }),
 
   x: computed('histogramWidth', function() {
@@ -60,8 +60,7 @@ export default Ember.Component.extend({
         .range([get(this, 'histogramHeight'), 0]);
   }),
 
-
-  draw: function(){
+  draw(){
     let svg = get(this, 'svg'),
         margin = get(this, 'margin'),
         height = get(this, 'histogramHeight'),
@@ -105,13 +104,6 @@ export default Ember.Component.extend({
     this.draw();
   },
 
-  _calculateCurtainWidth(value) {
-    let histogramWidth = get(this, 'histogramWidth');
-    return Math.floor(value * histogramWidth);
-  },
-
-  currentBinIndex: null,
-
   actions: {
     updateValue(value) {
       set(this, 'value', value);
@@ -133,5 +125,11 @@ export default Ember.Component.extend({
       this.attrs.onSet([bins[currentBinIndex].x1, get(this, 'dataMax')]);
     }
   },
+
+  _calculateCurtainWidth(value) {
+    let histogramWidth = get(this, 'histogramWidth');
+    return Math.floor(value * histogramWidth);
+  },
+
   layout
 });
