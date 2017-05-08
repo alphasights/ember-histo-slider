@@ -10,6 +10,7 @@ const { computed, get, set } = Ember;
 export default Ember.Component.extend({
   svgWidth: '960',
   svgHeight: '500',
+  classNames: ['ember-histo-slider'],
   curtain: null,
   currentBinIndex: null,
   data: null,
@@ -33,7 +34,7 @@ export default Ember.Component.extend({
   }),
 
   svg: computed(function() {
-    return select('.ember-histo');
+    return select('.ember-histo-slider__histogram');
   }).volatile(),
 
   histogramHeight: computed('svgHeight', 'margin', function() {
