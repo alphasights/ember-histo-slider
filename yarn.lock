@@ -2583,6 +2583,12 @@ ember-try@^0.2.14:
     semver "^5.1.0"
     sync-exec "^0.6.2"
 
+ember-uuid@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ember-uuid/-/ember-uuid-1.0.0.tgz#0932f2b56d64417cab892d96e3cc69f895356df7"
+  dependencies:
+    ember-cli-babel "^5.1.5"
+
 ember-welcome-page@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/ember-welcome-page/-/ember-welcome-page-3.0.0.tgz#87eb8dc37427a5ec636132de08ef47ef91e30a0c"
