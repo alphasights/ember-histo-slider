@@ -3,6 +3,7 @@ import { histogram, max } from 'd3-array';
 import { axisBottom } from 'd3-axis';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
+import { v1 } from 'ember-uuid';
 import layout from '../templates/components/histo-slider';
 
 const { computed, get, set } = Ember;
@@ -20,6 +21,13 @@ export default Ember.Component.extend({
   margin: {top: 10, right: 30, bottom: 30, left: 30},
   setValue: null,
   value: null,
+  uniqueHistoSliderId: null,
+
+  init(){
+    this._super(...arguments);
+
+    set(this, 'uniqueHistoSliderId', `a${v1()}`);
+  },
 
   bins: computed('x', 'data', 'tickThreshold', function() {
     let x = get(this, 'x');
@@ -34,7 +42,8 @@ export default Ember.Component.extend({
   }),
 
   svg: computed(function() {
-    return select('.ember-histo-slider__histogram');
+    let id = get(this, 'uniqueHistoSliderId');
+    return select(`.${id}`);
   }).volatile(),
 
   histogramHeight: computed('svgHeight', 'margin', function() {

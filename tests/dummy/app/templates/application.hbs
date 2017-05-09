@@ -2,7 +2,19 @@
   data=model
   dataMin=0
   dataMax=80000
-  intervalCount=8
+  intervalCount=16
   onSet=(action "onSet")}}
 
   Set Value: {{setValue}}
+
+
+
+
+  {{histo-slider
+    data=model
+    dataMin=0
+    dataMax=70000
+    intervalCount=8
+    onSet=(action "onSet2")}}
+
+    Set Value: {{setValue2}}
