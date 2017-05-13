@@ -118,9 +118,15 @@ export default Ember.Component.extend({
     updateValue(value) {
       set(this, 'value', value);
       let bins = get(this, 'bins');
-      let currentBinIndex = bins.findIndex((bin) => {
-        return bin.x0 < value && value <= bin.x1;
-      });
+      let currentBinIndex;
+
+      if (value === get(this, 'dataMin')) {
+        currentBinIndex = -1;
+      } else {
+        currentBinIndex = bins.findIndex((bin) => {
+          return bin.x0 < value && value <= bin.x1;
+        });
+      }
 
       set(this, 'currentBinIndex', currentBinIndex)
 
@@ -129,10 +135,15 @@ export default Ember.Component.extend({
       curtain.attr('width', this._calculateCurtainWidth(currentBinRatio));
     },
 
-    setValue() {
-      let bins = get(this, 'bins')
+    setValue(value) {
       let currentBinIndex = get(this, 'currentBinIndex');
-      this.attrs.onSet([bins[currentBinIndex].x1, get(this, 'dataMax')]);
+      let leftBound;
+      if (currentBinIndex === -1) {
+        leftBound = 0;
+      } else {
+        leftBound = get(this, 'bins')[currentBinIndex].x1;
+      }
+      this.attrs.onSet([leftBound, get(this, 'dataMax')]);
     }
   },
 
