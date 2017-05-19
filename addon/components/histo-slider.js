@@ -9,8 +9,6 @@ import layout from '../templates/components/histo-slider';
 const { computed, get, set, String } = Ember;
 
 export default Ember.Component.extend({
-  svgWidth: '960',
-  svgHeight: '500',
   classNames: ['ember-histo-slider'],
   curtain: null,
   currentBinIndex: null,
@@ -85,6 +83,14 @@ export default Ember.Component.extend({
     let id = get(this, 'uniqueHistoSliderId');
     return select(`.${id}`);
   }).volatile(),
+
+  svgWidth: computed('svg', function(){
+    return get(this, 'svg').property('clientWidth');
+  }),
+
+  svgHeight: computed('svg', function(){
+    return get(this, 'svg').property('clientHeight');
+  }),
 
   x: computed('histogramWidth', function() {
     let max = get(this, 'dataMax');

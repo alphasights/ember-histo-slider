@@ -1,15 +1,15 @@
-{{histo-slider
-  data=model
-  dataMin=-10000
-  dataMax=80000
-  intervalCount=16
-  onSet=(action "onSet")}}
+<div style="width: 500px; height: 500px;">
+  {{histo-slider
+    data=model
+    dataMin=-10000
+    dataMax=80000
+    intervalCount=16
+    onSet=(action "onSet")}}
 
-  Set Value: {{setValue}}
+    Set Value: {{setValue}}
+</div>
 
-
-
-
+<div style="width: 900px; height: 400px;">
   {{histo-slider
     data=model
     dataMin=0
@@ -18,3 +18,15 @@
     onSet=(action "onSet2")}}
 
     Set Value: {{setValue2}}
+</div>
+
+<div style="width: 250px; height: 800px;">
+  {{histo-slider
+    data=model
+    dataMin=0
+    dataMax=80000
+    intervalCount=12
+    onSet=(action "onSet2")}}
+
+    Set Value: {{setValue2}}
+</div>
