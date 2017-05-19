@@ -6,7 +6,7 @@ import { select } from 'd3-selection';
 import { v1 } from 'ember-uuid';
 import layout from '../templates/components/histo-slider';
 
-const { computed, get, set } = Ember;
+const { computed, get, set, String } = Ember;
 
 export default Ember.Component.extend({
   svgWidth: '960',
@@ -29,7 +29,7 @@ export default Ember.Component.extend({
     set(this, 'uniqueHistoSliderId', `a${v1()}`);
   },
 
-  bins: computed('x', 'data', 'tickThreshold', function() {
+  bins: computed('x', 'data', 'intervalCount', function() {
     let x = get(this, 'x');
     let data = get(this, 'data');
     return histogram()
@@ -37,14 +37,9 @@ export default Ember.Component.extend({
         .thresholds(get(this, 'intervalCount'))(data);
   }),
 
-  startValue: computed('dataMin', 'dataMax', function() {
-    return (get(this, 'dataMin') + get(this, 'dataMax')) / 2
+  histoStyle: computed('histogramWidth', 'margin', function(){
+    return String.htmlSafe(`width: ${get(this, 'histogramWidth')}px; margin-left: ${get(this, 'margin').left}px;`);
   }),
-
-  svg: computed(function() {
-    let id = get(this, 'uniqueHistoSliderId');
-    return select(`.${id}`);
-  }).volatile(),
 
   histogramHeight: computed('svgHeight', 'margin', function() {
     let svgHeight = get(this, 'svgHeight');
@@ -59,6 +54,38 @@ export default Ember.Component.extend({
     return svgWidth - margin.left - margin.right;
   }),
 
+  rectXs: computed('x', 'bins', 'intervalCount', function(){
+    let x = get(this, 'x');
+    let bins = get(this, 'bins');
+
+    return bins.map((bin) => x(bin.x0));
+  }),
+
+  rectHeights: computed('y', 'histogramHeight', 'bins', function(){
+    let y = get(this, 'y');
+    let histogramHeight = get(this, 'histogramHeight');
+    let bins = get(this, 'bins');
+
+    return bins.map((bin) => histogramHeight - y(bin.length));
+  }),
+
+  rectWidth: computed('x', 'bins', function(){
+    let x = get(this, 'x');
+    let bins = get(this, 'bins');
+
+    return x(bins[0].x1) - x(bins[0].x0) - 1;
+  }),
+
+  startValue: computed('dataMin', 'dataMax', function() {
+    let min = (get(this, 'dataMin') + get(this, 'dataMax')) / 2;
+    return [min, get(this, 'dataMax')];
+  }),
+
+  svg: computed(function() {
+    let id = get(this, 'uniqueHistoSliderId');
+    return select(`.${id}`);
+  }).volatile(),
+
   x: computed('histogramWidth', function() {
     let max = get(this, 'dataMax');
     let min = get(this, 'dataMin');
@@ -70,39 +97,16 @@ export default Ember.Component.extend({
         .range([get(this, 'histogramHeight'), 0]);
   }),
 
+  didInsertElement: function(){
+    this.draw();
+  },
+
   draw(){
     let svg = get(this, 'svg'),
         margin = get(this, 'margin'),
         height = get(this, 'histogramHeight'),
         x = get(this, 'x'),
-        y = get(this, 'y'),
-        bins = get(this, 'bins'),
-        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-      let curtain = svg.append('rect')
-          .attr('x', margin.left)
-          .attr('y', 0)
-          .attr('height', svg.attr('height') - margin.bottom)
-          .attr('width', this._calculateCurtainWidth(get(this, 'startValue')))
-          .style('fill', 'gray')
-          .style('fill-opacity', '.5');
-
-    set(this, 'curtain', curtain);
-    let bar = g.selectAll('.bar')
-      .data(bins)
-      .enter().append('g')
-        .attr('class', 'bar')
-        .attr('transform', function(d) { return 'translate(' + x(d.x0) + ',' + y(d.length) + ')'; });
-
-    bar.append('rect')
-        .attr('x', 1)
-        .attr('width', x(bins[0].x1) - x(bins[0].x0) - 1)
-        .attr('height', function(d) { return height - y(d.length); });
-
-    bar.append('text')
-        .attr('dy', '.75em')
-        .attr('y', 6)
-        .attr('x', (x(bins[0].x1) - x(bins[0].x0)) / 2)
-        .attr('text-anchor', 'middle');
+        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     g.append('g')
         .attr('class', 'axis axis--x')
@@ -110,13 +114,8 @@ export default Ember.Component.extend({
         .call(axisBottom(x));
   },
 
-  didInsertElement: function(){
-    this.draw();
-  },
-
   actions: {
     updateValue(value) {
-      set(this, 'value', value);
       let bins = get(this, 'bins');
       let currentBinIndex;
 
@@ -128,14 +127,10 @@ export default Ember.Component.extend({
         });
       }
 
-      set(this, 'currentBinIndex', currentBinIndex)
-
-      let currentBinRatio = (currentBinIndex + 1) / bins.length;
-      let curtain = get(this, 'curtain');
-      curtain.attr('width', this._calculateCurtainWidth(currentBinRatio));
+      set(this, 'currentBinIndex', currentBinIndex);
     },
 
-    setValue(value) {
+    setValue() {
       let currentBinIndex = get(this, 'currentBinIndex');
       let leftBound;
       if (currentBinIndex === -1) {
@@ -143,13 +138,10 @@ export default Ember.Component.extend({
       } else {
         leftBound = get(this, 'bins')[currentBinIndex].x1;
       }
-      this.attrs.onSet([leftBound, get(this, 'dataMax')]);
-    }
-  },
+      let bounds = [leftBound, get(this, 'dataMax')]
 
-  _calculateCurtainWidth(value) {
-    let histogramWidth = get(this, 'histogramWidth');
-    return Math.floor(value * histogramWidth);
+      this.attrs.onSet(bounds);
+    }
   },
 
   layout
