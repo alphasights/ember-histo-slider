@@ -10,6 +10,8 @@ const { computed, get, set, String } = Ember;
 
 export default Ember.Component.extend({
   classNames: ['ember-histo-slider'],
+
+  axisTicks: null,
   curtain: null,
   currentBinIndex: null,
   data: null,
@@ -109,6 +111,7 @@ export default Ember.Component.extend({
 
   draw(){
     let svg = get(this, 'svg'),
+        ticks = get(this, 'axisTicks'),
         margin = get(this, 'margin'),
         height = get(this, 'histogramHeight'),
         x = get(this, 'x'),
@@ -117,7 +120,7 @@ export default Ember.Component.extend({
     g.append('g')
         .attr('class', 'axis axis--x')
         .attr('transform', 'translate(0,' + height + ')')
-        .call(axisBottom(x));
+        .call(axisBottom(x).ticks(ticks));
   },
 
   actions: {

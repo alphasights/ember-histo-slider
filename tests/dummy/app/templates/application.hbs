@@ -1,32 +1,32 @@
 <div style="width: 500px; height: 500px;">
   {{histo-slider
+    axisTicks=3
     data=model
     dataMin=-10000
     dataMax=80000
     intervalCount=16
     onSet=(action "onSet")}}
-
+  </div>
     Set Value: {{setValue}}
-</div>
 
 <div style="width: 900px; height: 400px;">
   {{histo-slider
+    axisTicks=4
     data=model
     dataMin=0
     dataMax=70000
     intervalCount=8
     onSet=(action "onSet2")}}
-
+  </div>
     Set Value: {{setValue2}}
-</div>
 
 <div style="width: 250px; height: 800px;">
   {{histo-slider
     data=model
     dataMin=0
     dataMax=80000
+    axisTicks=4
     intervalCount=12
     onSet=(action "onSet2")}}
-
+  </div>
     Set Value: {{setValue2}}
-</div>
