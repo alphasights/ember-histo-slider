@@ -2,6 +2,7 @@ import Ember from 'ember';
 import { select } from 'd3-selection';
 import { v1 } from 'ember-uuid';
 import layout from '../templates/components/histo-slider';
+import moment from 'moment';
 
 const { computed, get, set, String } = Ember;
 
@@ -13,6 +14,7 @@ export default Ember.Component.extend({
   data: null,
   dataMax: null,
   dataMin: null,
+  dateFormat: "MMM Do YYYY",
   intervalCount: computed.readOnly('data.length'),
   dataInterval: computed('dataMin', 'dataMax', 'data.[]', function(){
     let dataMin = get(this, 'dataMin');
@@ -119,6 +121,19 @@ export default Ember.Component.extend({
       }
 
       set(this, 'currentBinIndex', currentBinIndex);
+
+      let leftBound;
+      if (currentBinIndex === -1) {
+        leftBound = dataMin;
+      } else {
+        let relativeValue = Math.abs(value - dataMin);
+        let domain = Math.abs(dataMax - dataMin);
+        leftBound = Math.ceil(relativeValue/domain * get(this, 'intervalCount')) * get(this, 'dataInterval') + dataMin;
+      }
+      set(this, 'leftBound', leftBound);
+      let bounds = [this._formatTime(leftBound), this._formatTime(get(this, 'dataMax'))];
+
+      this.attrs.onUpdate(bounds);
     },
 
     setValue(value) {
@@ -133,10 +148,15 @@ export default Ember.Component.extend({
         let domain = Math.abs(dataMax - dataMin);
         leftBound = Math.ceil(relativeValue/domain * get(this, 'intervalCount')) * get(this, 'dataInterval') + dataMin;
       }
-      let bounds = [leftBound, get(this, 'dataMax')]
+      set(this, 'leftBound', leftBound);
+      let bounds = [this._formatTime(leftBound), this._formatTime(get(this, 'dataMax'))];
 
       this.attrs.onSet(bounds);
     }
+  },
+
+  _formatTime(ms){
+    return moment(ms).format(get(this, 'dateFormat'));
   },
 
   layout
