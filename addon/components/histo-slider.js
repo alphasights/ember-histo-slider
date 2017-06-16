@@ -1,7 +1,4 @@
 import Ember from 'ember';
-import { histogram, max } from 'd3-array';
-import { axisBottom } from 'd3-axis';
-import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 import { v1 } from 'ember-uuid';
 import layout from '../templates/components/histo-slider';
@@ -11,7 +8,6 @@ const { computed, get, set, String } = Ember;
 export default Ember.Component.extend({
   classNames: ['ember-histo-slider'],
 
-  axisTicks: null,
   curtain: null,
   currentBinIndex: null,
   data: null,
@@ -25,7 +21,7 @@ export default Ember.Component.extend({
 
     return (dataMax - dataMin) / data.length;
   }),
-  margin: {top: 10, right: 30, bottom: 30, left: 30},
+  margin: {top: 10, right: 30, bottom: 10, left: 30},
   setValue: null,
   value: null,
   uniqueHistoSliderId: null,
@@ -35,14 +31,6 @@ export default Ember.Component.extend({
 
     set(this, 'uniqueHistoSliderId', `a${v1()}`);
   },
-
-  bins: computed('x', 'data', 'intervalCount', function() {
-    let x = get(this, 'x');
-    let data = get(this, 'data');
-    return histogram()
-        .domain(x.domain())
-        .thresholds(get(this, 'intervalCount'))(data);
-  }),
 
   histoStyle: computed('histogramWidth', 'margin', function(){
     return String.htmlSafe(`width: ${get(this, 'histogramWidth')}px; margin-left: ${get(this, 'margin').left}px;`);
@@ -116,35 +104,6 @@ export default Ember.Component.extend({
   svgHeight: computed('svg', function(){
     return get(this, 'svg').property('clientHeight');
   }),
-
-  x: computed('histogramWidth', function() {
-    let max = get(this, 'dataMax');
-    let min = get(this, 'dataMin');
-    return scaleLinear().domain([min, max]).rangeRound([0, get(this, 'histogramWidth')]);
-  }),
-
-  y: computed('histogramHeight', function() {
-    return scaleLinear().domain([0, max(get(this, 'bins'), function(d) { return d.length; })])
-        .range([get(this, 'histogramHeight'), 0]);
-  }),
-
-  didInsertElement: function(){
-    this.draw();
-  },
-
-  draw(){
-    let svg = get(this, 'svg'),
-        ticks = get(this, 'axisTicks'),
-        margin = get(this, 'margin'),
-        height = get(this, 'histogramHeight'),
-        x = get(this, 'x'),
-        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-    g.append('g')
-        .attr('class', 'axis axis--x')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(axisBottom(x).ticks(ticks));
-  },
 
   actions: {
     updateValue(value) {
