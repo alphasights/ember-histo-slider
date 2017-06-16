@@ -4,12 +4,26 @@ import moment from 'moment';
 const { set } = Ember;
 
 export default Ember.Controller.extend({
-  dataMin: moment().subtract(1, 'year').valueOf(),
-  dataMax: moment().subtract(1, 'day').valueOf(),
-  dataMin2: moment().subtract(3, 'year').valueOf(),
-  dataMax2: moment().subtract(1, 'year').valueOf(),
-  dataMin3: moment().subtract(8, 'month').valueOf(),
-  dataMax3: moment().subtract(2, 'month').valueOf(),
+  range: {
+    'min': moment().subtract(1, 'year').valueOf(),
+    '25%': moment().subtract(6, 'month').valueOf(),
+    '75%': moment().subtract(1, 'month').valueOf(),
+    'max': moment().subtract(1, 'day').valueOf(),
+  },
+
+  range2: {
+    'min': moment().subtract(3, 'year').valueOf(),
+    '50%': moment().subtract(6, 'month').valueOf(),
+    'max': moment().subtract(1, 'day').valueOf(),
+  },
+
+  range3: {
+    'min': moment().subtract(1, 'year').valueOf(),
+    '25%': moment().subtract(6, 'month').valueOf(),
+    '75%': moment().subtract(1, 'month').valueOf(),
+    'max': moment().subtract(1, 'day').valueOf(),
+  },
+
   setValue: null,
   setValue2: null,
   actions: {

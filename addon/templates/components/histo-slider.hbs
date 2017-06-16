@@ -1,4 +1,4 @@
-<svg class={{concat "ember-histo-slider__histogram " uniqueHistoSliderId}}>
+<svg class={{concat "ember-histo-slider__histogram " uniqueHistoId}}>
   <g transform="translate({{margin.left}},{{margin.top}})">
     <g transform="scale(1,1)">
       {{#each data as |bin index|}}
@@ -14,12 +14,11 @@
     </g>
   </g>
 </svg>
-<div class="ember-histo-slider__slider" style={{histoStyle}}>
+<div class={{concat "ember-histo-slider__slider " uniqueSliderId}} style={{histoStyle}}>
   {{range-slider
     connect="upper"
     on-update="updateValue"
     on-change="setValue"
-    min=dataMin
-    max=dataMax
+    range=range
     start=(object-at 0 startValue)}}
 </div>
