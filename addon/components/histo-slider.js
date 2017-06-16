@@ -17,7 +17,14 @@ export default Ember.Component.extend({
   data: null,
   dataMax: null,
   dataMin: null,
-  intervalCount: null,
+  intervalCount: computed.readOnly('data.length'),
+  dataInterval: computed('dataMin', 'dataMax', 'data.[]', function(){
+    let dataMin = get(this, 'dataMin');
+    let dataMax = get(this, 'dataMax');
+    let data = get(this, 'data');
+
+    return (dataMax - dataMin) / data.length;
+  }),
   margin: {top: 10, right: 30, bottom: 30, left: 30},
   setValue: null,
   value: null,
@@ -51,29 +58,45 @@ export default Ember.Component.extend({
   histogramWidth: computed('svgWidth', 'margin', function() {
     let svgWidth = get(this, 'svgWidth');
     let margin = get(this, 'margin');
+
     return svgWidth - margin.left - margin.right;
   }),
 
-  rectXs: computed('x', 'bins', 'intervalCount', function(){
-    let x = get(this, 'x');
-    let bins = get(this, 'bins');
+  rectXs: computed('data', 'rectWidth', function(){
+    let data = get(this, 'data');
+    let rectWidth = get(this, 'rectWidth');
 
-    return bins.map((bin) => x(bin.x0));
+    if (data.length === 0) {
+      return 0;
+    }
+    let xArray = [];
+    data.forEach((_, index) => {
+      xArray.push(rectWidth * index);
+    });
+
+    return xArray;
   }),
 
-  rectHeights: computed('y', 'histogramHeight', 'bins', function(){
-    let y = get(this, 'y');
+  rectHeights: computed('data', 'histogramHeight', 'bins', function(){
+    let data = get(this, 'data');
     let histogramHeight = get(this, 'histogramHeight');
-    let bins = get(this, 'bins');
-
-    return bins.map((bin) => histogramHeight - y(bin.length));
+    let dataMax = Math.max(...data);
+    let heights = [];
+    data.forEach((datum) => {
+      heights.push((datum / dataMax) * histogramHeight);
+    });
+    return heights;
   }),
 
-  rectWidth: computed('x', 'bins', function(){
-    let x = get(this, 'x');
-    let bins = get(this, 'bins');
+  rectWidth: computed('histogramWidth', 'data.[]', function(){
+    let histogramWidth = get(this, 'histogramWidth');
+    let data = get(this, 'data');
 
-    return x(bins[0].x1) - x(bins[0].x0) - 1;
+    if (data.length === 0) {
+      return 0;
+    }
+
+    return (histogramWidth / data.length);
   }),
 
   startValue: computed('dataMin', 'dataMax', function() {
@@ -125,27 +148,31 @@ export default Ember.Component.extend({
 
   actions: {
     updateValue(value) {
-      let bins = get(this, 'bins');
       let currentBinIndex;
-
-      if (value === get(this, 'dataMin')) {
+      let dataMax = get(this, 'dataMax');
+      let dataMin = get(this, 'dataMin');
+      if (value === dataMin) {
         currentBinIndex = -1;
       } else {
-        currentBinIndex = bins.findIndex((bin) => {
-          return bin.x0 < value && value <= bin.x1;
-        });
+        let relativeValue = Math.abs(value - dataMin);
+        let domain = Math.abs(dataMax - dataMin);
+        currentBinIndex = Math.ceil(relativeValue/domain * get(this, 'intervalCount')) - 1;
       }
 
       set(this, 'currentBinIndex', currentBinIndex);
     },
 
-    setValue() {
+    setValue(value) {
       let currentBinIndex = get(this, 'currentBinIndex');
+      let dataMin = get(this, 'dataMin');
+      let dataMax = get(this, 'dataMax');
       let leftBound;
       if (currentBinIndex === -1) {
-        leftBound = 0;
+        leftBound = dataMin;
       } else {
-        leftBound = get(this, 'bins')[currentBinIndex].x1;
+        let relativeValue = Math.abs(value - dataMin);
+        let domain = Math.abs(dataMax - dataMin);
+        leftBound = Math.ceil(relativeValue/domain * get(this, 'intervalCount')) * get(this, 'dataInterval') + dataMin;
       }
       let bounds = [leftBound, get(this, 'dataMax')]
 

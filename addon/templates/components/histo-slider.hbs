@@ -1,7 +1,7 @@
 <svg class={{concat "ember-histo-slider__histogram " uniqueHistoSliderId}}>
   <g transform="translate({{margin.left}},{{margin.top}})">
     <g transform="scale(1,1)">
-      {{#each bins as |bin index|}}
+      {{#each data as |bin index|}}
         <g class="bar" transform="translate({{object-at index rectXs}},{{histogramHeight}}) scale(-1,1)">
           <rect class="
             ember-histo-slider__rect
