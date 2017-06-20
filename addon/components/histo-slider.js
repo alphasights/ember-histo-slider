@@ -9,7 +9,6 @@ const { computed, get, set, String } = Ember;
 export default Ember.Component.extend({
   classNames: ['ember-histo-slider'],
 
-  curtain: null,
   currentBinIndex: null,
   data: null,
   dateFormat: "MMM Do YYYY",
@@ -17,9 +16,7 @@ export default Ember.Component.extend({
   margin: {top: 10, right: 30, bottom: 10, left: 30},
   setValue: null,
   range: null,
-  value: null,
   uniqueHistoSliderId: null,
-
 
   dataMin: computed('range', function(){
     return get(this, 'range').min;
