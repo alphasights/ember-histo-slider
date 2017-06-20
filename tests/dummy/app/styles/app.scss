@@ -1,0 +1,46 @@
+.class1 .noUi {
+  &-connect {
+    background: #ff7700;
+    border: 1px solid #f70;
+    border-radius: 0 15rem 15rem 0;
+    box-shadow: none;
+  }
+
+  &-horizontal {
+    height: 8px;
+  }
+
+  &-tooltip {
+    background: none;
+    border: 0;
+    width: 150rem;
+  }
+
+  &-handle {
+    background: none;
+    background-image: url('slider.png');
+    background-repeat: no-repeat;
+    background-size: 35rem 25rem;
+    border: 0;
+    box-shadow: none;
+    top: -7px !important;
+
+    &::after {
+      display: none;
+    }
+
+    &::before {
+      display: none;
+    }
+  }
+
+  &-target {
+    background: #e2e2e2;
+    border: 0;
+    box-shadow: none;
+  }
+}
+
+.class1 rect {
+  fill: red;
+}
