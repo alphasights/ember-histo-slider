@@ -1,20 +1,8 @@
-<svg class={{concat "ember-histo-slider__histogram " uniqueHistoId}}>
-  <g transform="translate({{margin.left}},{{margin.top}})">
-    <g transform="scale(1,1)">
-      {{#each data as |bin index|}}
-        <g class="bar" transform="translate({{object-at index rectXs}},{{histogramHeight}}) scale(-1,1)">
-          <rect class="
-            ember-histo-slider__rect
-            {{if (lte index currentBinIndex) 'ember-histo-slider__rect--excluded'}}"
-            transform="rotate(180)"
-            width={{rectWidth}}
-            height="{{object-at index rectHeights}}px"/>
-        </g>
-      {{/each}}
-    </g>
-  </g>
-</svg>
-<div class={{concat "ember-histo-slider__slider " uniqueSliderId}} style={{histoStyle}}>
+{{histo-slider/meta-histogram
+  currentBinIndex=currentBinIndex
+  metaData=metaData
+  uniqueHistoSliderId=uniqueHistoSliderId}}
+<div class={{concat "ember-histo-slider__slider " uniqueSliderId}}>
   {{range-slider
     connect="upper"
     on-update="updateValue"

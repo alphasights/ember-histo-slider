@@ -1,10 +1,9 @@
 import Ember from 'ember';
-import { select } from 'd3-selection';
 import { v1 } from 'ember-uuid';
 import layout from '../templates/components/histo-slider';
 import moment from 'moment';
 
-const { computed, get, set, String } = Ember;
+const { computed, get, set } = Ember;
 
 export default Ember.Component.extend({
   classNames: ['ember-histo-slider'],
@@ -12,9 +11,7 @@ export default Ember.Component.extend({
   currentBinIndex: null,
   data: null,
   dateFormat: "MMM Do YYYY",
-  intervalCount: computed.readOnly('data.length'),
-  margin: {top: 10, right: 30, bottom: 10, left: 30},
-  setValue: null,
+  intervalCount: computed.readOnly('metaData.length'),
   range: null,
   uniqueHistoSliderId: null,
 
@@ -38,61 +35,6 @@ export default Ember.Component.extend({
 
   uniqueSliderId: computed('uniqueHistoSliderId', function(){
     return `${get(this, 'uniqueHistoSliderId')}__slider`;
-  }),
-
-  histoStyle: computed('histogramWidth', 'margin', function(){
-    return String.htmlSafe(`width: ${get(this, 'histogramWidth')}px; margin-left: ${get(this, 'margin').left}px;`);
-  }),
-
-  histogramHeight: computed('svgHeight', 'margin', function() {
-    let svgHeight = get(this, 'svgHeight');
-    let margin = get(this, 'margin');
-
-    return svgHeight - margin.top - margin.bottom;
-  }),
-
-  histogramWidth: computed('svgWidth', 'margin', function() {
-    let svgWidth = get(this, 'svgWidth');
-    let margin = get(this, 'margin');
-
-    return svgWidth - margin.left - margin.right;
-  }),
-
-  rectXs: computed('data', 'rectWidth', function(){
-    let data = get(this, 'data');
-    let rectWidth = get(this, 'rectWidth');
-
-    if (data.length === 0) {
-      return 0;
-    }
-    let xArray = [];
-    data.forEach((_, index) => {
-      xArray.push(rectWidth * index);
-    });
-
-    return xArray;
-  }),
-
-  rectHeights: computed('data', 'histogramHeight', 'bins', function(){
-    let data = get(this, 'data');
-    let histogramHeight = get(this, 'histogramHeight');
-    let dataMax = Math.max(...data);
-    let heights = [];
-    data.forEach((datum) => {
-      heights.push((datum / dataMax) * histogramHeight);
-    });
-    return heights;
-  }),
-
-  rectWidth: computed('histogramWidth', 'data.[]', function(){
-    let histogramWidth = get(this, 'histogramWidth');
-    let data = get(this, 'data');
-
-    if (data.length === 0) {
-      return 0;
-    }
-
-    return (histogramWidth / data.length);
   }),
 
   rangePercentages: computed('range', function(){
@@ -139,8 +81,8 @@ export default Ember.Component.extend({
     return rectValues;
   }),
 
-  rectPercentage: computed('data.[]', function(){
-    let data = get(this, 'data');
+  rectPercentage: computed('metaData.[]', function(){
+    let data = get(this, 'metaData');
 
     if (data.length === 0) {
       return 0;
@@ -152,19 +94,6 @@ export default Ember.Component.extend({
   startValue: computed('dataMin', 'dataMax', function() {
     let min = (get(this, 'dataMin') + get(this, 'dataMax')) / 2;
     return [min, get(this, 'dataMax')];
-  }),
-
-  svg: computed(function() {
-    let id = get(this, 'uniqueHistoId');
-    return select(`.${id}`);
-  }).volatile(),
-
-  svgWidth: computed('svg', function(){
-    return get(this, 'svg').property('clientWidth');
-  }),
-
-  svgHeight: computed('svg', function(){
-    return get(this, 'svg').property('clientHeight');
   }),
 
   actions: {
