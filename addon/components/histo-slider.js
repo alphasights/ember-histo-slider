@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import { v1 } from 'ember-uuid';
 import layout from '../templates/components/histo-slider';
-import moment from 'moment';
 
 const { computed, get, set } = Ember;
 
@@ -10,7 +9,6 @@ export default Ember.Component.extend({
 
   currentBinIndex: null,
   data: null,
-  dateFormat: "MMM Do YYYY",
   intervalCount: computed.readOnly('metaData.length'),
   range: null,
   uniqueHistoSliderId: null,
@@ -123,10 +121,6 @@ export default Ember.Component.extend({
     }
   },
 
-  _formatTime(ms){
-    return moment(ms).format(get(this, 'dateFormat'));
-  },
-
   _calculateBounds(){
     let currentBinIndex = get(this, 'currentBinIndex');
     let dataMin = get(this, 'dataMin');
@@ -136,7 +130,7 @@ export default Ember.Component.extend({
     } else {
       leftBound = get(this, 'rectValues')[currentBinIndex + 1];
     }
-    return [this._formatTime(leftBound), this._formatTime(get(this, 'dataMax'))];
+    return [leftBound, get(this, 'dataMax')];
   },
 
   _valuePercentage(value) {

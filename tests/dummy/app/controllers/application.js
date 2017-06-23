@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import moment from 'moment';
 
-const { set } = Ember;
+const { get, set } = Ember;
 
 export default Ember.Controller.extend({
   range: {
@@ -24,31 +24,37 @@ export default Ember.Controller.extend({
     'max': moment().subtract(1, 'day').valueOf(),
   },
 
+  dateFormat: "MMM Do YYYY",
+
+  _formatTime(ms){
+    return moment(ms).format(get(this, 'dateFormat'));
+  },
+
   setValue: null,
   setValue2: null,
   actions: {
     onSet(value) {
-      set(this, 'setValue', value);
+      set(this, 'setValue', [this._formatTime(value[0]), this._formatTime(value[1])]);
     },
 
     onSet2(value) {
-      set(this, 'setValue2', value);
+      set(this, 'setValue2', [this._formatTime(value[0]), this._formatTime(value[1])]);
     },
 
     onSet3(value) {
-      set(this, 'setValue3', value);
+      set(this, 'setValue3', [this._formatTime(value[0]), this._formatTime(value[1])]);
     },
 
     onUpdate(value) {
-      set(this, 'updateValue', value);
+      set(this, 'updateValue', [this._formatTime(value[0]), this._formatTime(value[1])]);
     },
 
     onUpdate2(value) {
-      set(this, 'updateValue2', value);
+      set(this, 'updateValue2', [this._formatTime(value[0]), this._formatTime(value[1])]);
     },
 
     onUpdate3(value) {
-      set(this, 'updateValue3', value);
+      set(this, 'updateValue3', [this._formatTime(value[0]), this._formatTime(value[1])]);
     },
   }
 })
