@@ -7,6 +7,8 @@
     connect="upper"
     on-update="updateValue"
     on-change="setValue"
+    on-start=(action (mut isSliding) true)
+    on-end=(action (mut isSliding) false)
     range=range
     start=(object-at 0 startValue)}}
 </div>

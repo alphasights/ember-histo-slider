@@ -2,5 +2,8 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-histo-slider'
+  name: 'ember-histo-slider',
+  isDevelopingAddon: function() {
+    return true;
+  }
 };

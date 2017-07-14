@@ -6,12 +6,21 @@ const { computed, get, set } = Ember;
 
 export default Ember.Component.extend({
   classNames: ['ember-histo-slider'],
+  classNameBindings: [
+    'showHistoOnHover:ember-histo-slider--floating',
+    'isSliding:ember-histo-slider--active'],
 
   currentBinIndex: null,
   data: null,
   intervalCount: computed.readOnly('metaData.length'),
   range: null,
+  showHistoOnHover: null,
+  isSliding: false,
   uniqueHistoSliderId: null,
+
+  visibleModifier: computed('showHistoOnHover', 'isSliding', function(){
+    return (get(this, 'showHistoOnHover') && get(this, 'isSliding'));
+  }),
 
   dataMin: computed('range', function(){
     return get(this, 'range').min;

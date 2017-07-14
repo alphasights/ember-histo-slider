@@ -28,9 +28,7 @@ export default Ember.Component.extend({
     return get(this, 'svg').property('clientWidth');
   }),
 
-  histogramHeight: computed('svg', function(){
-    return get(this, 'svg').property('clientHeight');
-  }),
+  histogramHeight: 80,
 
   rectHeights: computed('data', 'histogramHeight', function(){
     let data = get(this, 'data');
