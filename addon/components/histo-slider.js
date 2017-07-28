@@ -100,6 +100,7 @@ export default Ember.Component.extend({
 
   start: computed('dataMin', 'dataMax', function() {
     let mean = (get(this, 'dataMin') + get(this, 'dataMax')) / 2;
+
     return mean;
   }),
 
