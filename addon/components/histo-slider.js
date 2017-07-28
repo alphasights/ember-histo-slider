@@ -14,6 +14,7 @@ export default Ember.Component.extend({
   data: null,
   intervalCount: computed.readOnly('metaData.length'),
   range: null,
+  histogramHeight: 80,
   showHistoOnHover: null,
   isSliding: false,
   uniqueHistoSliderId: null,

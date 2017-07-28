@@ -1,7 +1,10 @@
-{{histo-slider/meta-histogram
-  currentBinIndex=currentBinIndex
-  metaData=metaData
-  uniqueHistoSliderId=uniqueHistoSliderId}}
+<div class="ember-histo-slider__histogram">
+  {{histo-slider/meta-histogram
+    currentBinIndex=currentBinIndex
+    metaData=metaData
+    histogramHeight=histogramHeight
+    uniqueHistoSliderId=uniqueHistoSliderId}}
+</div>
 <div class={{concat "ember-histo-slider__slider " uniqueSliderId}}>
   {{range-slider
     connect="upper"
@@ -11,4 +14,8 @@
     on-end=(action (mut isSliding) false)
     range=range
     start=start}}
+
+    {{#if hasBlock}}
+      {{yield}}
+    {{/if}}
 </div>

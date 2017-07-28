@@ -6,7 +6,8 @@ const { get, computed } = Ember;
 
 export default Ember.Component.extend({
   tagName: 'svg',
-  classNames: ['ember-histo-slider__histogram'],
+  attributeBindings: ['height'],
+  classNames: ['ember-histo-slider__svg'],
   classNameBindings: ['uniqueHistoId'],
 
   metaData: null,
@@ -14,6 +15,11 @@ export default Ember.Component.extend({
   data: computed.alias('metaData'),
 
   uniqueHistoSliderId: null,
+  histogramHeight: null,
+
+  height: computed('histogramHeight', function(){
+    return get(this, 'histogramHeight') - 10;
+  }),
 
   uniqueHistoId: computed('uniqueHistoSliderId', function(){
     return `${get(this, 'uniqueHistoSliderId')}__histogram`;
@@ -28,11 +34,9 @@ export default Ember.Component.extend({
     return get(this, 'svg').property('clientWidth');
   }),
 
-  histogramHeight: 80,
-
-  rectHeights: computed('data', 'histogramHeight', function(){
+  rectHeights: computed('data', 'height', function(){
     let data = get(this, 'data');
-    let histogramHeight = get(this, 'histogramHeight');
+    let height = get(this, 'height');
     let dataMax = Math.max(...data);
     let heights = [];
 
@@ -41,7 +45,7 @@ export default Ember.Component.extend({
     }
 
     data.forEach((datum) => {
-      heights.push((datum / dataMax) * histogramHeight);
+      heights.push((datum / dataMax) * height);
     });
 
     return heights;
