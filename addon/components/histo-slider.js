@@ -98,9 +98,9 @@ export default Ember.Component.extend({
     return (1.0 / data.length);
   }),
 
-  startValue: computed('dataMin', 'dataMax', function() {
-    let min = (get(this, 'dataMin') + get(this, 'dataMax')) / 2;
-    return [min, get(this, 'dataMax')];
+  start: computed('dataMin', 'dataMax', function() {
+    let mean = (get(this, 'dataMin') + get(this, 'dataMax')) / 2;
+    return mean;
   }),
 
   actions: {
