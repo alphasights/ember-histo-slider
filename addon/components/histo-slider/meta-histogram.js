@@ -36,12 +36,12 @@ export default Ember.Component.extend({
     let dataMax = Math.max(...data);
     let heights = [];
 
+    if (dataMax == 0) {
+      return Array(data.length).fill(0);
+    }
+
     data.forEach((datum) => {
-      if (dataMax == 0) {
-        heights.push(0)
-      } else {
-        heights.push((datum / dataMax) * histogramHeight);
-      }
+      heights.push((datum / dataMax) * histogramHeight);
     });
 
     return heights;
