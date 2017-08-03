@@ -1,32 +1,40 @@
-<div style="width: 200px; height: 100px; padding: 30px 10px;">
-  {{histo-slider
+<div style="width: 200px; padding: 30px 10px;">
+  {{#histo-slider
     class="class1"
     metaData=model
+    histogramHeight=100
     range=range
     onUpdate=(action "onUpdate")
     onSet=(action "onSet")}}
-</div>
     UpdateValue: {{updateValue}}
     Set Value: {{setValue}}
+  {{/histo-slider}}
+</div>
 
-<div style="width: 300px; height: 200px;">
-  {{histo-slider
+
+<div style="width: 300px; padding: 20px;">
+  {{#histo-slider
     class="class2"
+    histogramHeight=200
     metaData=model
     range=range2
     onUpdate=(action "onUpdate2")
     onSet=(action "onSet2")}}
-</div>
     UpdateValue: {{updateValue2}}
     Set Value: {{setValue2}}
+  {{/histo-slider}}
+</div>
 
-<div style="width: 300px; height: 100px;">
-  {{histo-slider
+
+<div style="width: 300px; padding: 20px;">
+  {{#histo-slider
     class="class3"
     metaData=model
+    histogramHeight=100
     range=range3
     onUpdate=(action "onUpdate3")
     onSet=(action "onSet3")}}
-</div>
     UpdateValue: {{updateValue3}}
     Set Value: {{setValue3}}
+  {{/histo-slider}}
+</div>
