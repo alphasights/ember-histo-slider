@@ -2,6 +2,11 @@
   {{#each metaData as |bin index|}}
     <g class="bar" transform="translate({{object-at index rectXs}},{{height}}) scale(-1,1)">
       <rect class="
+        ember-histo-slider__backing"
+        transform="rotate(180)"
+        width={{rectWidth}}
+        height="{{object-at index rectHeights}}px"/>
+      <rect class="
         ember-histo-slider__rect
         {{if (lte index currentBinIndex) 'ember-histo-slider__rect--excluded'}}"
         transform="rotate(180)"
