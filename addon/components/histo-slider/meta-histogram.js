@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import { select } from 'd3-selection';
 import layout from '../../templates/components/histo-slider/meta-histogram';
+import { axisLeft } from 'd3-axis';
+import { scaleLinear } from 'd3-scale';
 
 const { get, computed } = Ember;
 
@@ -18,7 +20,7 @@ export default Ember.Component.extend({
   histogramHeight: null,
 
   height: computed('histogramHeight', function(){
-    return get(this, 'histogramHeight') - 10;
+    return get(this, 'histogramHeight');
   }),
 
   uniqueHistoId: computed('uniqueHistoSliderId', function(){
@@ -77,6 +79,30 @@ export default Ember.Component.extend({
 
     return xArray;
   }),
+
+  histoTransformX: computed('histogramWidth', function(){
+    return get(this, 'histogramWidth') * 0.1 + 1;
+  }),
+
+  scaleLinear: computed('data', function() {
+    let data = get(this, 'data');
+    let dataMax = Math.max(...data);
+
+    return scaleLinear().domain([0, dataMax]).range([get(this, 'histogramHeight'), 0]);
+  }),
+
+  didInsertElement() {
+    this._super(...arguments);
+
+    let scaleLinear = get(this, 'scaleLinear');
+    let svg = get(this, 'svg');
+    let histoTransformX = get(this, 'histoTransformX');
+    let histogramWidth = get(this, 'histogramWidth');
+
+    let axis = svg.insert('g', ':first-child').attr('transform', `translate(${histogramWidth -1}, 0) scale(1,0.9)`).call(axisLeft(scaleLinear).tickSize(histogramWidth - histoTransformX).ticks(3));
+
+    axis.selectAll('path').attr('opacity', '0');
+  },
 
   layout
 });
