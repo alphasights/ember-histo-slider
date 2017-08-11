@@ -30,6 +30,12 @@ export default Ember.Controller.extend({
     return moment(ms).format(get(this, 'dateFormat'));
   },
 
+  otherModel: (function() {
+    let data = [];
+    for (var i=0;i<10;++i) data[i]=Math.random() * 160;
+    return data;
+  })(),
+
   setValue: null,
   setValue2: null,
   actions: {

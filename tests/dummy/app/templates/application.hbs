@@ -1,7 +1,7 @@
 <div style="width: 200px; padding: 30px 10px;">
   {{#histo-slider
     class="class1"
-    metaData=model
+    metaData=(if alternateModel otherModel model)
     histogramHeight=100
     range=range
     onUpdate=(action "onUpdate")
@@ -10,6 +10,8 @@
     Set Value: {{setValue}}
   {{/histo-slider}}
 </div>
+
+<button {{action (toggle "alternateModel" this)}}> Change Data </button>
 
 
 <div style="width: 300px; padding: 20px;">
