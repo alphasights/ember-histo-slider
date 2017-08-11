@@ -84,6 +84,10 @@ export default Ember.Component.extend({
     return get(this, 'histogramWidth') * 0.1 + 1;
   }),
 
+  histoTransformY: computed('height', function(){
+    return get(this, 'height') * 0.05;
+  }),
+
   scaleLinear: computed('data', function() {
     let data = get(this, 'data');
     let dataMax = Math.max(...data);
@@ -97,11 +101,12 @@ export default Ember.Component.extend({
     let scaleLinear = get(this, 'scaleLinear');
     let svg = get(this, 'svg');
     let histoTransformX = get(this, 'histoTransformX');
+    let histoTransformY = get(this, 'histoTransformY');
     let histogramWidth = get(this, 'histogramWidth');
 
     svg.selectAll('.ember-histo-slider__axis').remove();
 
-    let axis = svg.insert('g', ':first-child').attr('class', 'ember-histo-slider__axis').attr('transform', `translate(${histogramWidth -1}, 0) scale(1,0.9)`).call(axisLeft(scaleLinear).tickSize(histogramWidth - histoTransformX).ticks(3));
+    let axis = svg.insert('g', ':first-child').attr('class', 'ember-histo-slider__axis').attr('transform', `translate(${histogramWidth -1}, ${histoTransformY -1}) scale(1,0.9)`).call(axisLeft(scaleLinear).tickSize(histogramWidth - histoTransformX).ticks(3));
 
     axis.selectAll('path').attr('opacity', '0');
   },
