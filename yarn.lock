@@ -2497,9 +2497,9 @@ ember-composable-helpers@^2.0.1:
     broccoli-funnel "^1.0.1"
     ember-cli-babel "^5.1.7"
 
-ember-d3@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/ember-d3/-/ember-d3-0.3.2.tgz#14988346cd94104d1d4560c21fc6ba1f56135c0c"
+ember-d3@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/ember-d3/-/ember-d3-0.3.4.tgz#ddbc449c63f0ef6fb7a22bd4e09a9c6755337fff"
   dependencies:
     broccoli-filter "^1.2.4"
     broccoli-funnel "^1.0.3"
