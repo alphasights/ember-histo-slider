@@ -57,7 +57,7 @@ $ember-histo-slider-default-border-color: #CCC;
     }
   }
 
-  &--active {
+  &--active.ember-histo-slider--floating {
     .ember-histo-slider__histogram {
       visibility: visible;
       pointer-events: all;

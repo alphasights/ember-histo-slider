@@ -13,12 +13,16 @@
 
 <button {{action (toggle "alternateModel" this)}}> Change Data </button>
 
+<div style="width:10px; height:200px;">
+  hi
+</div>
 
 <div style="width: 300px; padding: 20px;">
   {{#histo-slider
     class="class2"
     histogramHeight=200
     metaData=model
+    showHistoOnHover=true
     range=range2
     onUpdate=(action "onUpdate2")
     onSet=(action "onSet2")}}
