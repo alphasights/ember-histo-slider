@@ -2,18 +2,10 @@
   background: #red;
 }
 
-.ember-histo-slider__rect--excluded {
-  fill-opacity: 0.5;
-}
-
-.ember-histo-slider__backing {
-  fill: #fff;
-}
-
 /* second approach */
 
-$padding: 4px;
-$border-color: #CCC;
+$ember-histo-slider-padding: 4px;
+$ember-histo-slider-default-border-color: #CCC;
 
 .ember-histo-slider {
   background-color: inherit;
@@ -26,21 +18,31 @@ $border-color: #CCC;
     border-left: 1px solid transparent;
     border-right: 1px solid transparent;
 
-    padding-top: 2 * $padding;
-    padding-left: $padding;
-    padding-right: $padding;
+    padding-top: 2 * $ember-histo-slider-padding;
+    padding-left: $ember-histo-slider-padding;
+    padding-right: $ember-histo-slider-padding;
   }
 
   &__histogram {
     background-color: inherit;
-    padding-top: $padding;
-    padding-left: $padding;
-    padding-right: $padding;
+    padding-top: $ember-histo-slider-padding;
+    padding-left: $ember-histo-slider-padding;
+    padding-right: $ember-histo-slider-padding;
     width: 100%;
   }
 
   &__svg {
     width: 100%
+  }
+
+  &__backing {
+    fill: #fff;
+  }
+
+  &__rect {
+    &--excluded {
+      fill-opacity: 0.5;
+    }
   }
 
   &--floating {
@@ -61,18 +63,18 @@ $border-color: #CCC;
       pointer-events: all;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
-      border-left: 1px solid $border-color;
-      border-right: 1px solid $border-color;
-      border-top: 1px solid $border-color;
+      border-left: 1px solid $ember-histo-slider-default-border-color;
+      border-right: 1px solid $ember-histo-slider-default-border-color;
+      border-top: 1px solid $ember-histo-slider-default-border-color;
     }
 
     .ember-histo-slider__slider {
 
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
-      border-bottom: 1px solid $border-color;
-      border-left: 1px solid $border-color;
-      border-right: 1px solid $border-color;
+      border-bottom: 1px solid $ember-histo-slider-default-border-color;
+      border-left: 1px solid $ember-histo-slider-default-border-color;
+      border-right: 1px solid $ember-histo-slider-default-border-color;
     }
   }
 }
